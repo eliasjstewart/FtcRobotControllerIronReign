@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.robots.limelight;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -11,9 +12,13 @@ import java.util.Map;
 
 public class Limelight implements Subsystem {
     private Limelight3A limelight;
+    LLResult result = limelight.getLatestResult();
 
     Limelight (HardwareMap hardwareMap, Robot lime){
     limelight = hardwareMap.get(Limelight3A.class, "limelight");
+    limelight.setPollRateHz(100);
+    limelight.start();
+    limelight.pipelineSwitch(0);
     }
     @Override
     public void update(Canvas fieldOverlay) {
@@ -32,7 +37,15 @@ public class Limelight implements Subsystem {
     @Override
     public Map<String, Object> getTelemetry(boolean debug) {
         Map<String, Object> telemetryMap = new LinkedHashMap<>();
-
+    if(result != null && result.isValid()){
+        double tx = result.getTx();
+        double ty = result.getTy();
+        double ta = result.getTa();
+        telemetryMap.put("Target X", tx);
+        telemetryMap.put("Target Y", ty);
+        telemetryMap.put("Target Area", ta);
+    }
+    else{ telemetryMap.put("Limelight", "No Targets");}
         return telemetryMap;
     }
 
