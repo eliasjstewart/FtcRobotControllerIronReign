@@ -15,7 +15,7 @@ public class Robot implements Subsystem {
     Limelight limelight;
     public Robot(HardwareMap hardwareMap){
     limelight = new Limelight(hardwareMap,this);
-
+    subsystems = new Subsystem[]{limelight};
     }
 
 

@@ -12,13 +12,14 @@ import java.util.Map;
 
 public class Limelight implements Subsystem {
     private Limelight3A limelight;
-    LLResult result = limelight.getLatestResult();
+
 
     Limelight (HardwareMap hardwareMap, Robot lime){
     limelight = hardwareMap.get(Limelight3A.class, "limelight");
+
     limelight.setPollRateHz(100);
     limelight.start();
-    limelight.pipelineSwitch(0);
+
     }
     @Override
     public void update(Canvas fieldOverlay) {
@@ -37,6 +38,7 @@ public class Limelight implements Subsystem {
     @Override
     public Map<String, Object> getTelemetry(boolean debug) {
         Map<String, Object> telemetryMap = new LinkedHashMap<>();
+        LLResult result = limelight.getLatestResult();
     if(result != null && result.isValid()){
         double tx = result.getTx();
         double ty = result.getTy();
